@@ -32,7 +32,7 @@ Or install it yourself as:
 ## Usage
 
 ```ruby
-Erlang.parse(" {a,[{a_foo,'ABCDE',\"ABCDE\",<<\"ABCDE\">>}]} ")
+ERLE.parse(" {a,[{a_foo,'ABCDE',\"ABCDE\",<<\"ABCDE\">>}]} ")
 $ {:a=>[{:a_foo=>["ABCDE", "ABCDE", "ABCDE"]}]}
 ```
 
