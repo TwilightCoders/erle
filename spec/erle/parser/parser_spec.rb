@@ -84,13 +84,19 @@ RSpec.describe ERLE::Term do
   end
 
   it 'parses single key value pair (no semicolon before key)' do
-    input = "{inconsistent_cluster, \"Node 'rabbit@172.18.0.3' thinks it's clustered with node 'rabbit@172.18.0.7', but 'rabbit@172.18.0.7' disagrees\"}"
+    input = "{:failed_to_remove_node, :\"rabbit@172.18.0.3\", {:active, 'Mnesia is running', :\"rabbit@172.18.0.3\"}}"
+    output = { failed_to_remove_node: ["rabbit@172.18.0.3", { active: [ 'Mnesia is running', 'rabbit@172.18.0.3' ]}  }
+    expect(ERLE.to_ruby(input)).to eq(output)
+  end
+
+  it 'parses single key value pair (no semicolon before key)' do
+    input = "{:inconsistent_cluster, \"Node 'rabbit@172.18.0.3' thinks it's clustered with node 'rabbit@172.18.0.7', but 'rabbit@172.18.0.7' disagrees\"}"
     output = { inconsistent_cluster: "Node 'rabbit@172.18.0.3' thinks it's clustered with node 'rabbit@172.18.0.7', but 'rabbit@172.18.0.7' disagrees"}
     expect(ERLE.to_ruby(input)).to eq(output)
   end
 
   it 'parses single key value pair (semicolon before key)' do
-    input = "{:inconsistent_cluster, \"Node 'rabbit@172.18.0.3' thinks it's clustered with node 'rabbit@172.18.0.7', but 'rabbit@172.18.0.7' disagrees\"}"
+    input = "{:inconsistent_cluster, 'Node \'rabbit@172.18.0.3\' thinks it\'s clustered with node \'rabbit@172.18.0.7\', but \'rabbit@172.18.0.7\' disagrees'}"
     output = { inconsistent_cluster: "Node 'rabbit@172.18.0.3' thinks it's clustered with node 'rabbit@172.18.0.7', but 'rabbit@172.18.0.7' disagrees"}
     expect(ERLE.to_ruby(input)).to eq(output)
   end
