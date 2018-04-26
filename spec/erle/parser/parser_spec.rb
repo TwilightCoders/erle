@@ -83,6 +83,18 @@ RSpec.describe ERLE::Term do
     expect(ERLE.to_ruby(input)).to eq(output)
   end
 
+  it 'parses single key value pair (no semicolon before key)' do
+    input = "{inconsistent_cluster, \"Node 'rabbit@172.18.0.3' thinks it's clustered with node 'rabbit@172.18.0.7', but 'rabbit@172.18.0.7' disagrees\"}"
+    output = { inconsistent_cluster: "Node 'rabbit@172.18.0.3' thinks it's clustered with node 'rabbit@172.18.0.7', but 'rabbit@172.18.0.7' disagrees"}
+    expect(ERLE.to_ruby(input)).to eq(output)
+  end
+
+  it 'parses single key value pair (semicolon before key)' do
+    input = "{:inconsistent_cluster, \"Node 'rabbit@172.18.0.3' thinks it's clustered with node 'rabbit@172.18.0.7', but 'rabbit@172.18.0.7' disagrees\"}"
+    output = { inconsistent_cluster: "Node 'rabbit@172.18.0.3' thinks it's clustered with node 'rabbit@172.18.0.7', but 'rabbit@172.18.0.7' disagrees"}
+    expect(ERLE.to_ruby(input)).to eq(output)
+  end
+
   it 'contains wtf' do
     input = <<-RBT
 [{nodes,[{disc,['rabbit@ip-10-1-2-220.us-west-2.compute.internal',
