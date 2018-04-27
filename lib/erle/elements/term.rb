@@ -54,16 +54,20 @@ module ERLE
 
       result = parser.matched
 
+
       if close && !parser.scan(close)
         raise parser.raise_unexpected_token("Expected term closure \" #{close.source} \"")
       end
-
       # # Make sure we kill any trailing close
       # # TODO: Consider raising if no match?
       # # TODO: Consider doing only if we started with an opening...
       # parser.scan(ERLE::Registry.closings_regex)
-      # # binding.pry
-      new(result)
+
+      if block_given?
+        yield(result)
+      else
+        new(result)
+      end
     end
 
   end
