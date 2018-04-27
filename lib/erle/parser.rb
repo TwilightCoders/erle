@@ -83,11 +83,12 @@ module ERLE
 
     def whereami?(peek = 30, back = 30)
       back = [back, string.length - pos].sort[0]
-      "#{peekaboo(peek, back)}'\n#{"─" * (back)}┘"
+      " #{peekaboo(peek, back)}'\n#{"_" * (back)}⤴"
     end
 
     def raise_unexpected_token(followup=nil)
-      message = "Unexpected token at:\n#{whereami?}"
+      message = "Syntax Error. Unexpected token: #{peek(1)}\n"
+      message += whereami?
       message += "\n#{followup}" if followup
       raise ParserError, message
     end
