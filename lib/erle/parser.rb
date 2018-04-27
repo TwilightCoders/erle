@@ -30,6 +30,7 @@ module ERLE
                               (?i:e[+-]?\d+)
                             )
                             )/x
+    SYMBOL                = /^\:(?:(?:"([^"]*)")|(?:([A-z0-9_-]*)))/
     TRUE                  = /true/
     FALSE                 = /false/
 
@@ -102,6 +103,12 @@ module ERLE
         true
       when scan(FALSE)
         false
+      when scan(SYMBOL)
+        if (string_match = (str = matched.gsub(/^\:/, '')).match(/^"([^"]*)"$/))
+          string_match[1].freeze
+        else
+          str.to_sym
+        end
       when !eos? && scan(ERLE::Registry.openings_regex) # TODO: Take out !eos?
         regex, term_class = ERLE::Registry.open_find(matched)
         term_str = term_class.parse(self)
